@@ -12,7 +12,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 class MainActivity : AppCompatActivity() {
 
     val pageradapter = ViewPagerAdapter(this)
-
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +27,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }.attach()
         }
-
-
     }
 
     override fun onBackPressed() {
