@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchapp.Retrofit.Document
 import com.example.imagesearchapp.Retrofit.SearchData
 import com.example.imagesearchapp.Retrofit.SearchRetrofit
@@ -26,7 +27,6 @@ import kotlinx.coroutines.withContext
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    lateinit var adapter: ImageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,15 +49,17 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         with(binding){
             btnFragSearch.setOnClickListener { // 키보드 내리기
                 val keyboardHidden = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
-                rvFragSearchlist.adapter = adapter
+                rvFragSearchlist.adapter
+                rvFragSearchlist.layoutManager = GridLayoutManager(context,2)
                 fecthSearchImage(etFragInput.text.toString())
+
                 searchResult.observe(viewLifecycleOwner) {
-                    adapter
                 }
             }
             // 저장된 검색어 불러오기
