@@ -8,9 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import com.example.imagesearchapp.Retrofit.SearchData
+import com.example.imagesearchapp.Retrofit.SearchRetrofit
 import com.example.imagesearchapp.SharedPreferences.App
 import com.example.imagesearchapp.SharedPreferences.SharedPreferencesManager
 import com.example.imagesearchapp.databinding.FragmentSearchBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class SearchFragment : Fragment() {
@@ -41,14 +45,25 @@ class SearchFragment : Fragment() {
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
             }
             etFragInput.setText(App.prefs.loadSearchInput())
+
+
+
         }
     }
 
-    override fun onDestroy() {
-        App.prefs.saveSearchInput(binding.etFragInput.text.toString())
-        super.onDestroy()
+    private suspend fun getSearchImage(search : String) = withContext(Dispatchers.IO) {
+        SearchRetrofit.api.getSearchImage(query = search).documents
     }
 
+    override fun onStop() {
+        super.onStop()
+        App.prefs.saveSearchInput(binding.etFragInput.text.toString())
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     companion object {
         @JvmStatic

@@ -33,6 +33,11 @@ class MyLockerFragment : Fragment() {
     }
 
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
     companion object {
         fun newInstance(param1: String, param2: String) =
