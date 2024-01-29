@@ -4,18 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imagesearchapp.Retrofit.Document
-import com.example.imagesearchapp.Retrofit.SearchData
 import com.example.imagesearchapp.databinding.SearchResultListBinding
+import java.text.SimpleDateFormat
 
-class ImageAdapter(private val searchResult : List<Document>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+class ImageAdapter() : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+    val searchResult = mutableListOf<Document>()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageAdapter.ImageViewHolder {
         return ImageViewHolder(SearchResultListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as ImageViewHolder).bind(searchResult[position])
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        holder.bind(searchResult[position])
     }
-
     override fun getItemCount(): Int {
         return searchResult.size
     }
@@ -23,8 +23,9 @@ class ImageAdapter(private val searchResult : List<Document>) : RecyclerView.Ada
     inner class ImageViewHolder(private val binding : SearchResultListBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(item : Document) {
             with(binding) {
-                tvSearchlistTitle.text = item.displaySiteName
-                tvSearchlistDate.text = item.datetime
+                ivSearchThumbnail
+                tvSearchSitename.text = item.displaySiteName
+                tvSearchDate.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.datetime)
             }
         }
     }

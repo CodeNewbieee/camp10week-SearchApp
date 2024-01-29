@@ -1,6 +1,7 @@
 package com.example.imagesearchapp.Retrofit
 
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class SearchData(
     val documents: List<Document>,
@@ -28,5 +29,5 @@ data class Document(
     val displaySiteName: String,
     @SerializedName("doc_url")
     val docUrl: String,
-    val datetime: String
+    val datetime: Date
 )

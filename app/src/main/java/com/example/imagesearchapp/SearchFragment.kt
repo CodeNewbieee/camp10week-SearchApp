@@ -27,7 +27,7 @@ import kotlinx.coroutines.withContext
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-
+    private val imageAdapter by lazy { ImageAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,7 +35,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private val searchResult = MutableLiveData<List<Document>>()
+//    private val searchResult = MutableLiveData<List<Document>>()
 
 
     override fun onCreateView(
@@ -55,12 +55,12 @@ class SearchFragment : Fragment() {
                 val keyboardHidden = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
-                rvFragSearchlist.adapter
-                rvFragSearchlist.layoutManager = GridLayoutManager(context,2)
-                fecthSearchImage(etFragInput.text.toString())
 
-                searchResult.observe(viewLifecycleOwner) {
-                }
+                rvFragSearchlist.adapter = imageAdapter
+                rvFragSearchlist.layoutManager = GridLayoutManager(context,2)
+                rvFragSearchlist.setHasFixedSize(true)
+
+                fecthSearchImage(etFragInput.text.toString())
             }
             // 저장된 검색어 불러오기
             etFragInput.setText(App.prefs.loadSearchInput())
@@ -71,7 +71,8 @@ class SearchFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             runCatching {
                 val image = getSearchImage(search)
-                searchResult.value = image
+                imageAdapter.searchResult.addAll(image)
+                imageAdapter.notifyDataSetChanged()  // 동적데이터로 livedata나 listadapter를 사용한것이 아니라서 notify해줘야 recyclerview에 반영
             }.onFailure {
                 Log.e("KakaoApi", "fecthSearchImage() failed! : ${it.message}")
             }

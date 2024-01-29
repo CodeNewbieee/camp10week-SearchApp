@@ -6,7 +6,7 @@
     android:layout_height="240dp">
 
     <ImageView
-        android:id="@+id/iv_searchlist"
+        android:id="@+id/iv_search_thumbnail"
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_margin="10dp"
@@ -19,32 +19,32 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_searchlist_check"
+        android:id="@+id/iv_search_check"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_star_check"
-        android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="@+id/iv_searchlist"
-        app:layout_constraintEnd_toEndOf="@+id/iv_searchlist"/>
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@+id/iv_search_thumbnail"
+        app:layout_constraintEnd_toEndOf="@+id/iv_search_thumbnail"/>
 
     <TextView
-        android:id="@+id/tv_searchlist_title"
+        android:id="@+id/tv_search_sitename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Title"
         android:textSize="17sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/iv_searchlist"
-        app:layout_constraintTop_toBottomOf="@+id/iv_searchlist" />
+        app:layout_constraintStart_toStartOf="@+id/iv_search_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/iv_search_thumbnail" />
 
     <TextView
-        android:id="@+id/tv_searchlist_date"
+        android:id="@+id/tv_search_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="date"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/iv_searchlist"
-        app:layout_constraintTop_toBottomOf="@+id/tv_searchlist_title" />
+        app:layout_constraintStart_toStartOf="@+id/iv_search_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/tv_search_sitename" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
