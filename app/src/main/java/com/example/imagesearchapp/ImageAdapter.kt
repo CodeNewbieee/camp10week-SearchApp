@@ -14,12 +14,21 @@ import java.text.SimpleDateFormat
 
 class ImageAdapter() : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
     val searchResult = mutableListOf<Document>()
+
+    interface ItemClick {
+        fun onClick(view: View, position: Int)
+    }
+    var itemClick: ItemClick? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageAdapter.ImageViewHolder {
         return ImageViewHolder(SearchResultListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         holder.bind(searchResult[position])
+        holder.itemView.setOnClickListener {
+            itemClick?.onClick(it,position)
+        }
     }
     override fun getItemCount(): Int {
         return searchResult.size

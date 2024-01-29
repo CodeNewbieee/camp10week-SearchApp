@@ -49,21 +49,22 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         with(binding){
             btnFragSearch.setOnClickListener { // 키보드 내리기
                 val keyboardHidden = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
-
                 rvFragSearchlist.adapter = imageAdapter
                 rvFragSearchlist.layoutManager = GridLayoutManager(context,2)
                 rvFragSearchlist.setHasFixedSize(true)
 
+                // 검색창에 입력한 값의 결과 불러오기
                 fecthSearchImage(etFragInput.text.toString())
             }
             // 저장된 검색어 불러오기
             etFragInput.setText(App.prefs.loadSearchInput())
+
+
         }
     }
 
@@ -71,8 +72,14 @@ class SearchFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             runCatching {
                 val image = getSearchImage(search)
-                imageAdapter.searchResult.addAll(image)
-                imageAdapter.notifyDataSetChanged()  // 동적데이터로 livedata나 listadapter를 사용한것이 아니라서 notify해줘야 recyclerview에 반영
+                if(imageAdapter.searchResult.isNullOrEmpty())
+                    imageAdapter.searchResult.addAll(image)
+                else {
+                    imageAdapter.searchResult.clear()
+                    imageAdapter.searchResult.addAll(image)
+                }
+                // 동적데이터로 livedata나 listadapter를 사용한것이 아니라서 notify해줘야 recyclerview에 반영
+                imageAdapter.notifyDataSetChanged()
             }.onFailure {
                 Log.e("KakaoApi", "fecthSearchImage() failed! : ${it.message}")
             }
