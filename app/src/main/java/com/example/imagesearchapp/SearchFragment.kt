@@ -1,6 +1,7 @@
 package com.example.imagesearchapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Im
 import android.util.Log
@@ -9,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,6 +21,7 @@ import com.example.imagesearchapp.Retrofit.SearchRetrofit
 import com.example.imagesearchapp.SharedPreferences.App
 import com.example.imagesearchapp.SharedPreferences.SharedPreferencesManager
 import com.example.imagesearchapp.databinding.FragmentSearchBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,9 +38,7 @@ class SearchFragment : Fragment() {
         arguments?.let {
         }
     }
-
 //    private val searchResult = MutableLiveData<List<Document>>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,17 +56,22 @@ class SearchFragment : Fragment() {
                 val keyboardHidden = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
-                rvFragSearchlist.adapter = imageAdapter
+                rvFragSearchlist.adapter = imageAdapter.apply {
+                    itemClick =object :ImageAdapter.ItemClick{
+                        override fun onClick(view: View, position: Int) {
+                            setFragmentResult(Constans.REQUEST_KEY, bundleOf(Constans.FAVORITE_DATA to imageAdapter.searchResult[position]))
+                        }
+                    }
+                }
                 rvFragSearchlist.layoutManager = GridLayoutManager(context,2)
                 rvFragSearchlist.setHasFixedSize(true)
 
                 // 검색창에 입력한 값의 결과 불러오기
-                fecthSearchImage(etFragInput.text.toString())
+                if(etFragInput.text.isEmpty()) Snackbar.make(root,"검색어를 입력해주세요",2000).show()
+                else fecthSearchImage(etFragInput.text.toString())
             }
             // 저장된 검색어 불러오기
             etFragInput.setText(App.prefs.loadSearchInput())
-
-
         }
     }
 

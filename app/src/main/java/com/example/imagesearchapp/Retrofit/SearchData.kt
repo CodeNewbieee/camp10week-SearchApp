@@ -1,6 +1,8 @@
 package com.example.imagesearchapp.Retrofit
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import java.util.Date
 
 data class SearchData(
@@ -16,7 +18,7 @@ data class Meta(
     @SerializedName("is_end")
     val isEnd: Boolean
 )
-
+@Parcelize
 data class Document(
     val collection: String,
     @SerializedName("thumbnail_url")
@@ -30,4 +32,4 @@ data class Document(
     @SerializedName("doc_url")
     val docUrl: String,
     val datetime: Date
-)
+) : Parcelable

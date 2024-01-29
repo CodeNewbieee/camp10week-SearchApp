@@ -1,11 +1,9 @@
 package com.example.imagesearchapp
 
-import android.app.Activity
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.imagesearchapp.Retrofit.Document
@@ -40,6 +38,7 @@ class ImageAdapter() : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
                 Glide.with(itemView).load(item.thumbnailUrl).into(ivSearchThumbnail)
                 tvSearchSitename.text = item.displaySiteName
                 tvSearchDate.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.datetime)
+//                ivSearchFavorite.isVisible =true
             }
         }
     }

@@ -3,7 +3,9 @@ package com.example.imagesearchapp
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.example.imagesearchapp.Retrofit.Document
 import com.example.imagesearchapp.ViewPager.DepthPageTransformer
 import com.example.imagesearchapp.ViewPager.ViewPagerAdapter
 import com.example.imagesearchapp.databinding.ActivityMainBinding
@@ -26,6 +28,12 @@ class MainActivity : AppCompatActivity() {
                     1 ->tab.setText("내 보관함")
                 }
             }.attach()
+            val favoriteList = mutableListOf<Document>()
+            supportFragmentManager.setFragmentResultListener(Constans.REQUEST_KEY,this@MainActivity) {requestKey,bundle ->
+                val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA)
+                result?.let { favoriteList.add(it) }
+                Log.d("data", "favoriteList: $favoriteList ")
+            }
         }
     }
 
