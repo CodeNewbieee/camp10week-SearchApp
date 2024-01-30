@@ -1,17 +1,15 @@
 package com.example.imagesearchapp
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchapp.Retrofit.Document
 import com.example.imagesearchapp.databinding.FragmentMyLockerBinding
-import com.example.imagesearchapp.databinding.FragmentSearchBinding
 
 
 class MyLockerFragment : Fragment() {
@@ -40,20 +38,21 @@ class MyLockerFragment : Fragment() {
             rvFragMylocker.adapter = imageAdapter.apply {
                 itemClick = object : ImageAdapter.ItemClick {
                     override fun onClick(view: View, position: Int) {
-
+                        // 보관함 아이템 클릭시 내역 삭제
+                        imageAdapter.searchResult.removeAt(position)
                         imageAdapter.notifyDataSetChanged()
                     }
                 }
             }
+            rvFragMylocker.layoutManager = GridLayoutManager(context,2)
+            rvFragMylocker.setHasFixedSize(true)
+            // 메인에서 보낸 객체 데이터 받고 어댑터의 리스트에 보내기
             setFragmentResultListener(Constans.REQUEST_KEY2) { requestKey, bundle ->
                 val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA2)
                 result?.let { imageAdapter.searchResult.add(it) }
+                imageAdapter.notifyDataSetChanged()
                 Log.d("data", "my locker onViewCreated: $result")
             }
-
-//            val data = arguments?.getParcelableArrayList<Document>(Constans.FAVORITE_DATA2)
-//            Log.d("data", "mylockerfrag data : $data ")
-//            data?.let { imageAdapter.searchResult.addAll(it) }
         }
     }
 

@@ -30,16 +30,13 @@ class MainActivity : AppCompatActivity() {
                     1 ->tab.setText("내 보관함")
                 }
             }.attach()
-            val favoriteList = mutableListOf<Document>()
+            val favoriteList = ArrayList<Document>()
             supportFragmentManager.setFragmentResultListener(Constans.REQUEST_KEY1,this@MainActivity) {requestKey,bundle ->
                 val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA1)
                 result?.let { favoriteList.add(it) }
                 Log.d("data", "favoriteList: $favoriteList ")
+                supportFragmentManager.setFragmentResult(Constans.REQUEST_KEY2, bundleOf(Constans.FAVORITE_DATA2 to result))
             }
-            supportFragmentManager.setFragmentResult(Constans.REQUEST_KEY2, bundleOf(Constans.FAVORITE_DATA2 to favoriteList))
-//            val bundle = Bundle()
-//            bundle.putParcelableArrayList(Constans.FAVORITE_DATA2,favoriteList)
-//            MyLockerFragment().arguments = bundle
         }
     }
 
