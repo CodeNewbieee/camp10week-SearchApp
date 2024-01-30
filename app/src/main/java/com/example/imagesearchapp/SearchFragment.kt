@@ -57,9 +57,9 @@ class SearchFragment : Fragment() {
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
                 rvFragSearchlist.adapter = imageAdapter.apply {
-                    itemClick =object :ImageAdapter.ItemClick{
+                    itemClick =object :ImageAdapter.ItemClick{ // 검색창에서 특정리스트 아이템 클릭시 MainActity 리스트 변수에 갹체 데이터 전달
                         override fun onClick(view: View, position: Int) {
-                            setFragmentResult(Constans.REQUEST_KEY, bundleOf(Constans.FAVORITE_DATA to imageAdapter.searchResult[position]))
+                            setFragmentResult(Constans.REQUEST_KEY1, bundleOf(Constans.FAVORITE_DATA1 to imageAdapter.searchResult[position]))
                         }
                     }
                 }

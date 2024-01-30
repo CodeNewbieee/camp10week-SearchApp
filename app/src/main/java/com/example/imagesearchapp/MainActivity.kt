@@ -1,10 +1,12 @@
 package com.example.imagesearchapp
 
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import com.example.imagesearchapp.Retrofit.Document
 import com.example.imagesearchapp.ViewPager.DepthPageTransformer
 import com.example.imagesearchapp.ViewPager.ViewPagerAdapter
@@ -29,11 +31,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }.attach()
             val favoriteList = mutableListOf<Document>()
-            supportFragmentManager.setFragmentResultListener(Constans.REQUEST_KEY,this@MainActivity) {requestKey,bundle ->
-                val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA)
+            supportFragmentManager.setFragmentResultListener(Constans.REQUEST_KEY1,this@MainActivity) {requestKey,bundle ->
+                val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA1)
                 result?.let { favoriteList.add(it) }
                 Log.d("data", "favoriteList: $favoriteList ")
             }
+            supportFragmentManager.setFragmentResult(Constans.REQUEST_KEY2, bundleOf(Constans.FAVORITE_DATA2 to favoriteList))
+//            val bundle = Bundle()
+//            bundle.putParcelableArrayList(Constans.FAVORITE_DATA2,favoriteList)
+//            MyLockerFragment().arguments = bundle
         }
     }
 
