@@ -30,11 +30,14 @@ class MainActivity : AppCompatActivity() {
                     1 ->tab.setText("내 보관함")
                 }
             }.attach()
-            val favoriteList = ArrayList<Document>()
+            // 좋아요 리스트
+            // 추가 삭제 메인에서
+            // 서치에서는
+            // SearchFragment에서 보낸 데이터 받기
             supportFragmentManager.setFragmentResultListener(Constans.REQUEST_KEY1,this@MainActivity) {requestKey,bundle ->
                 val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA1)
-                result?.let { favoriteList.add(it) }
-                Log.d("data", "favoriteList: $favoriteList ")
+                Log.d("click data", "MainActivity list : $result ")
+                // 받은 데이더 다시 MyLockerFragment로 보내기
                 supportFragmentManager.setFragmentResult(Constans.REQUEST_KEY2, bundleOf(Constans.FAVORITE_DATA2 to result))
             }
         }

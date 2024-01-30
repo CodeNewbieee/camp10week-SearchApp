@@ -16,7 +16,7 @@ class MyLockerFragment : Fragment() {
 
     private var _binding: FragmentMyLockerBinding? = null
     private val binding get() = _binding!!
-    private val imageAdapter by lazy { ImageAdapter() }
+    private val searchListAdapter by lazy { SearchListAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,12 +35,15 @@ class MyLockerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            rvFragMylocker.adapter = imageAdapter.apply {
-                itemClick = object : ImageAdapter.ItemClick {
+            rvFragMylocker.adapter = searchListAdapter.apply {
+                itemClick = object : SearchListAdapter.ItemClick {
                     override fun onClick(view: View, position: Int) {
                         // 보관함 아이템 클릭시 내역 삭제
-                        imageAdapter.searchResult.removeAt(position)
-                        imageAdapter.notifyDataSetChanged()
+                        searchListAdapter.apply {
+                            searchResult.removeAt(position)
+                            searchResult[position].isLiked = false
+                            notifyDataSetChanged()
+                        }
                     }
                 }
             }
@@ -49,9 +52,9 @@ class MyLockerFragment : Fragment() {
             // 메인에서 보낸 객체 데이터 받고 어댑터의 리스트에 보내기
             setFragmentResultListener(Constans.REQUEST_KEY2) { requestKey, bundle ->
                 val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA2)
-                result?.let { imageAdapter.searchResult.add(it) }
-                imageAdapter.notifyDataSetChanged()
-                Log.d("data", "my locker onViewCreated: $result")
+                result?.let { searchListAdapter.searchResult.add(it) }
+                searchListAdapter.notifyDataSetChanged()
+                Log.d("click data", "MyLockerFragment list: $result")
             }
         }
     }

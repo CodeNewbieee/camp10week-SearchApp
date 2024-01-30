@@ -10,7 +10,7 @@ import com.example.imagesearchapp.Retrofit.Document
 import com.example.imagesearchapp.databinding.SearchResultListBinding
 import java.text.SimpleDateFormat
 
-class ImageAdapter() : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+class SearchListAdapter() : RecyclerView.Adapter<SearchListAdapter.ImageViewHolder>() {
     val searchResult = mutableListOf<Document>()
 
     interface ItemClick {
@@ -18,7 +18,7 @@ class ImageAdapter() : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
     }
     var itemClick: ItemClick? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageAdapter.ImageViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchListAdapter.ImageViewHolder {
         return ImageViewHolder(SearchResultListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
@@ -38,7 +38,12 @@ class ImageAdapter() : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
                 Glide.with(itemView).load(item.thumbnailUrl).into(ivSearchThumbnail)
                 tvSearchSitename.text = item.displaySiteName
                 tvSearchDate.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.datetime)
-//                ivSearchFavorite.isVisible =true
+                if(item.isLiked) {
+                    ivSearchFavorite.isVisible = true
+                }
+                else {
+                    ivSearchFavorite.isVisible = false
+                }
             }
         }
     }

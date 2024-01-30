@@ -31,5 +31,6 @@ data class Document(
     val displaySiteName: String,
     @SerializedName("doc_url")
     val docUrl: String,
-    val datetime: Date
+    val datetime: Date,
+    var isLiked: Boolean
 ) : Parcelable
