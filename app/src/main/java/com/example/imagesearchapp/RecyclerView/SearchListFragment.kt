@@ -53,11 +53,12 @@ class SearchListFragment : Fragment() {
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
                 rvFragSearchlist.adapter = searchListAdapter.apply {
-                    itemClick = object : SearchListAdapter.ItemClick { // 검색창에서 특정리스트 아이템 클릭시 MainActity 리스트 변수에 갹체 데이터 전달
+                    itemClick = object : SearchListAdapter.ItemClick {
                         override fun onClick(view: View, position: Int) {
+                            // 검색창에서 특정리스트 아이템 클릭시 MainActity 리스트 변수에 갹체 데이터 전달
+                            (activity as? MainActivity)?.addFavoriteList(searchList[position])
                             searchList[position].isLiked = true
                             notifyDataSetChanged()
-                            (activity as? MainActivity)?.addFavoriteList(searchList[position])
                         }
                     }
                 }
