@@ -4,18 +4,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.imagesearchapp.MyLockerFragment
-import com.example.imagesearchapp.SearchFragment
+import com.example.imagesearchapp.SearchListFragment
 
 class ViewPagerAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter(fragmentActivity) {
 
-    private val searchFragment = SearchFragment()
+    private val searchListFragment = SearchListFragment()
     private val myLockerFragment = MyLockerFragment()
 
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
         return when(position){
-            0 -> searchFragment
+            0 -> searchListFragment
             1 -> myLockerFragment
             else -> throw IllegalStateException("Invaild Position : ${position}")
         }

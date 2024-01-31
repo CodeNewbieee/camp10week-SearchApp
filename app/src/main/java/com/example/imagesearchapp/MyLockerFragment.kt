@@ -16,7 +16,7 @@ class MyLockerFragment : Fragment() {
 
     private var _binding: FragmentMyLockerBinding? = null
     private val binding get() = _binding!!
-    private val searchListAdapter by lazy { SearchListAdapter() }
+    private val myLockerListAdapter by lazy { MyLockerListAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,36 +35,27 @@ class MyLockerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            rvFragMylocker.adapter = searchListAdapter.apply {
-                itemClick = object : SearchListAdapter.ItemClick {
+            rvFragMylocker.adapter = myLockerListAdapter.apply {
+                itemClick = object : MyLockerListAdapter.ItemClick {
                     override fun onClick(view: View, position: Int) {
                         // 보관함 아이템 클릭시 내역 삭제
-                        searchListAdapter.apply {
-                            searchResult.removeAt(position)
-                            searchResult[position].isLiked = false
+                        myLockerListAdapter.apply {
+                          (activity as? MainActivity)?.removeFavoriteList(myLockerList[position])
                             notifyDataSetChanged()
                         }
                     }
                 }
             }
+            myLockerListAdapter.myLockerList = (activity as? MainActivity)?.favoriteList ?: mutableListOf()
             rvFragMylocker.layoutManager = GridLayoutManager(context,2)
             rvFragMylocker.setHasFixedSize(true)
-            // 메인에서 보낸 객체 데이터 받고 어댑터의 리스트에 보내기
-            setFragmentResultListener(Constans.REQUEST_KEY2) { requestKey, bundle ->
-                val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA2)
-                result?.let { searchListAdapter.searchResult.add(it) }
-                searchListAdapter.notifyDataSetChanged()
-                Log.d("click data", "MyLockerFragment list: $result")
-            }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 
     companion object {
         fun newInstance(param1: String) =

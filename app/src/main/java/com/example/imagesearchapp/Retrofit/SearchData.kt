@@ -20,17 +20,10 @@ data class Meta(
 )
 @Parcelize
 data class Document(
-    val collection: String,
     @SerializedName("thumbnail_url")
     val thumbnailUrl: String,
-    @SerializedName("image_url")
-    val imageUrl: String,
-    val width: Int,
-    val height: Int,
     @SerializedName("display_sitename")
     val displaySiteName: String,
-    @SerializedName("doc_url")
-    val docUrl: String,
     val datetime: Date,
-    var isLiked: Boolean
+    var isLiked: Boolean = false
 ) : Parcelable

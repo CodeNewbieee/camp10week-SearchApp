@@ -16,7 +16,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 class MainActivity : AppCompatActivity() {
 
     val pageradapter = ViewPagerAdapter(this)
+    var favoriteList = mutableListOf<Document>()
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    var favoriteListener : OnFavoriteChangeListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -30,16 +32,6 @@ class MainActivity : AppCompatActivity() {
                     1 ->tab.setText("내 보관함")
                 }
             }.attach()
-            // 좋아요 리스트
-            // 추가 삭제 메인에서
-            // 서치에서는
-            // SearchFragment에서 보낸 데이터 받기
-            supportFragmentManager.setFragmentResultListener(Constans.REQUEST_KEY1,this@MainActivity) {requestKey,bundle ->
-                val result = bundle.getParcelable<Document>(Constans.FAVORITE_DATA1)
-                Log.d("click data", "MainActivity list : $result ")
-                // 받은 데이더 다시 MyLockerFragment로 보내기
-                supportFragmentManager.setFragmentResult(Constans.REQUEST_KEY2, bundleOf(Constans.FAVORITE_DATA2 to result))
-            }
         }
     }
 
@@ -67,4 +59,16 @@ class MainActivity : AppCompatActivity() {
             binding.vp2Main.currentItem = binding.vp2Main.currentItem - 1
         }
     }
+
+    fun addFavoriteList(item : Document) {
+        if(!favoriteList.contains(item)) {
+            favoriteList.add(item)
+        }
+    }
+
+    fun removeFavoriteList(item : Document) {
+        favoriteList.remove(item)
+        favoriteListener?.onFavoriteRemoved(item)
+    }
+
 }

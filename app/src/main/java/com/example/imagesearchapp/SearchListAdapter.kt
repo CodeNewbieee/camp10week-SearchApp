@@ -11,7 +11,7 @@ import com.example.imagesearchapp.databinding.SearchResultListBinding
 import java.text.SimpleDateFormat
 
 class SearchListAdapter() : RecyclerView.Adapter<SearchListAdapter.ImageViewHolder>() {
-    val searchResult = mutableListOf<Document>()
+    var searchList = mutableListOf<Document>()
 
     interface ItemClick {
         fun onClick(view: View, position: Int)
@@ -23,13 +23,14 @@ class SearchListAdapter() : RecyclerView.Adapter<SearchListAdapter.ImageViewHold
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.bind(searchResult[position])
+        holder.bind(searchList[position])
         holder.itemView.setOnClickListener {
             itemClick?.onClick(it,position)
         }
     }
+
     override fun getItemCount(): Int {
-        return searchResult.size
+        return searchList.size
     }
 
     inner class ImageViewHolder(private val binding : SearchResultListBinding) : RecyclerView.ViewHolder(binding.root){

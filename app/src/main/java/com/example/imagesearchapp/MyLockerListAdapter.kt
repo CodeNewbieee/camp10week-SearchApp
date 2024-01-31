@@ -10,7 +10,7 @@ import com.example.imagesearchapp.databinding.SearchResultListBinding
 import java.text.SimpleDateFormat
 
 class MyLockerListAdapter() : RecyclerView.Adapter<MyLockerListAdapter.ImageViewHolder>() {
-    val MyLockerResult = mutableListOf<Document>()
+    var myLockerList = mutableListOf<Document>()
 
     interface ItemClick {
         fun onClick(view: View, position: Int)
@@ -22,13 +22,14 @@ class MyLockerListAdapter() : RecyclerView.Adapter<MyLockerListAdapter.ImageView
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.bind(MyLockerResult[position])
+        holder.bind(myLockerList[position])
         holder.itemView.setOnClickListener {
             itemClick?.onClick(it,position)
         }
     }
+
     override fun getItemCount(): Int {
-        return MyLockerResult.size
+        return myLockerList.size
     }
 
     inner class ImageViewHolder(private val binding : SearchResultListBinding) : RecyclerView.ViewHolder(binding.root){
