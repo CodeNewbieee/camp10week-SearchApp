@@ -40,10 +40,10 @@ class SearchListAdapter() : RecyclerView.Adapter<SearchListAdapter.ImageViewHold
                 tvSearchSitename.text = item.displaySiteName
                 tvSearchDate.text = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(item.datetime)
                 if(item.isLiked) {
-                    ivSearchFavorite.isVisible = true
+                    ivSearchFavorite.visibility = View.VISIBLE
                 }
                 else {
-                    ivSearchFavorite.isVisible = false
+                    ivSearchFavorite.visibility = View.GONE
                 }
             }
         }
