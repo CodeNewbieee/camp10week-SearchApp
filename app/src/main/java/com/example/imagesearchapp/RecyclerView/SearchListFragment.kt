@@ -1,4 +1,4 @@
-package com.example.imagesearchapp
+package com.example.imagesearchapp.RecyclerView
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.imagesearchapp.MainActivity
 import com.example.imagesearchapp.Retrofit.Document
 import com.example.imagesearchapp.Retrofit.SearchRetrofit
 import com.example.imagesearchapp.SharedPreferences.App
@@ -52,7 +53,7 @@ class SearchListFragment : Fragment() {
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
                 rvFragSearchlist.adapter = searchListAdapter.apply {
-                    itemClick = object :SearchListAdapter.ItemClick{ // 검색창에서 특정리스트 아이템 클릭시 MainActity 리스트 변수에 갹체 데이터 전달
+                    itemClick = object : SearchListAdapter.ItemClick { // 검색창에서 특정리스트 아이템 클릭시 MainActity 리스트 변수에 갹체 데이터 전달
                         override fun onClick(view: View, position: Int) {
                             searchList[position].isLiked = true
                             notifyDataSetChanged()

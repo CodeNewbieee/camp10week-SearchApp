@@ -1,4 +1,4 @@
-package com.example.imagesearchapp
+package com.example.imagesearchapp.RecyclerView
 
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +17,7 @@ class MyLockerListAdapter() : RecyclerView.Adapter<MyLockerListAdapter.ImageView
     }
     var itemClick: ItemClick? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyLockerListAdapter.ImageViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder(SearchResultListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 

@@ -3,8 +3,8 @@ package com.example.imagesearchapp.ViewPager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.imagesearchapp.MyLockerFragment
-import com.example.imagesearchapp.SearchListFragment
+import com.example.imagesearchapp.RecyclerView.MyLockerFragment
+import com.example.imagesearchapp.RecyclerView.SearchListFragment
 
 class ViewPagerAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter(fragmentActivity) {
 

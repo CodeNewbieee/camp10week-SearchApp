@@ -1,14 +1,12 @@
-package com.example.imagesearchapp
+package com.example.imagesearchapp.RecyclerView
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.imagesearchapp.Retrofit.Document
+import com.example.imagesearchapp.MainActivity
 import com.example.imagesearchapp.databinding.FragmentMyLockerBinding
 
 
