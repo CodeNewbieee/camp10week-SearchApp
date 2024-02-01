@@ -8,12 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.imagesearchapp.ImageViewModel
 import com.example.imagesearchapp.MainActivity
 import com.example.imagesearchapp.Retrofit.Document
 import com.example.imagesearchapp.SharedPreferences.App
 import com.example.imagesearchapp.databinding.FragmentMyLockerBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class MyLockerFragment : Fragment() {
@@ -21,6 +24,7 @@ class MyLockerFragment : Fragment() {
     private var _binding: FragmentMyLockerBinding? = null
     private val binding get() = _binding!!
     private val myLockerListAdapter by lazy { MyLockerListAdapter() }
+    private val lockerViewModel by activityViewModels<ImageViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,7 @@ class MyLockerFragment : Fragment() {
                     override fun onClick(view: View, position: Int) {
                         // 보관함 아이템 클릭시 내역 삭제
                         (activity as? MainActivity)?.removeFavoriteList(myLockerList[position])
+                        Snackbar.make(root,"선택된 이미지가 삭제되었습니다.",1500).show()
                         // 보관함 변수 리스트에 삭제된 현황을 shared에 저장 (삭제처리)
                         App.prefs.saveMyLockerList((activity as? MainActivity)?.favoriteList ?: mutableListOf())
                         myLockerListAdapter.notifyDataSetChanged()

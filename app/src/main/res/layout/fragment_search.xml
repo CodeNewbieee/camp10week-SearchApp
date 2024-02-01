@@ -10,9 +10,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_frag_title"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="90dp"
         android:layout_marginTop="5dp"
-        android:background="#D5C0FB"
+        android:background="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,9 +21,11 @@
             android:id="@+id/et_frag_input"
             android:layout_width="250dp"
             android:layout_height="50dp"
-            android:layout_marginStart="15dp"
+            android:layout_margin="20dp"
             android:background="@drawable/shape_radius_white"
             android:hint="검색하기"
+            android:textColor="@color/white"
+            android:textStyle="bold"
             android:inputType="text"
             android:maxLines="1"
             android:paddingStart="10dp"
@@ -36,15 +38,24 @@
             android:layout_width="90dp"
             android:layout_height="50dp"
             android:layout_marginEnd="20dp"
-            android:backgroundTint="#FAFAFA"
+            android:backgroundTint="#478CFF"
             android:text="검색"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
+
+        <View
+            android:id="@+id/line_frag_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#DFEBED"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -53,7 +64,7 @@
         android:id="@+id/rv_frag_searchlist"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

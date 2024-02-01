@@ -3,6 +3,7 @@ package com.example.imagesearchapp
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import com.example.imagesearchapp.RecyclerView.OnFavoriteChangeListener
 import com.example.imagesearchapp.Retrofit.Document
@@ -14,9 +15,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 class MainActivity : AppCompatActivity() {
 
     val pageradapter = ViewPagerAdapter(this)
-    var favoriteList = mutableListOf<Document>()
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    var favoriteList = mutableListOf<Document>()
     var favoriteListener : OnFavoriteChangeListener? = null
+    private val mainViewModel : ImageViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

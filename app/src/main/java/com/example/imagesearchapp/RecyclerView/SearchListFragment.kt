@@ -1,26 +1,24 @@
 package com.example.imagesearchapp.RecyclerView
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresExtension
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.imagesearchapp.ImageViewModel
 import com.example.imagesearchapp.MainActivity
 import com.example.imagesearchapp.Retrofit.Document
-import com.example.imagesearchapp.Retrofit.SearchRetrofit
 import com.example.imagesearchapp.SharedPreferences.App
 import com.example.imagesearchapp.databinding.FragmentSearchBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 interface OnFavoriteChangeListener {
     fun onFavoriteRemoved(item:Document)
@@ -30,6 +28,7 @@ class SearchListFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val searchListAdapter by lazy { SearchListAdapter() }
+    private val searchViewModel by activityViewModels<ImageViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +45,7 @@ class SearchListFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -59,6 +59,7 @@ class SearchListFragment : Fragment() {
                 val keyboardHidden = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
+                // recyclerview 구성, 아이템클릭 콜백함수
                 rvFragSearchlist.adapter = searchListAdapter.apply {
                     itemClick = object : SearchListAdapter.ItemClick {
                         override fun onClick(view: View, position: Int) {
@@ -66,6 +67,7 @@ class SearchListFragment : Fragment() {
                             (activity as? MainActivity)?.addFavoriteList(searchList[position])
                             searchList[position].isLiked = true
                             notifyDataSetChanged()
+                            Snackbar.make(root,"선택된 이미지가 보관되었습니다.",1500).show()
                             // 검색된 리스트 아이템 클릭시 shared에 저장
                             App.prefs.saveMyLockerList((activity as? MainActivity)?.favoriteList ?: mutableListOf())
                         }
@@ -83,8 +85,17 @@ class SearchListFragment : Fragment() {
                 }
 
                 // 검색창에 입력한 값의 결과 불러오기
-                if(etFragInput.text.isEmpty()) Snackbar.make(root,"검색어를 입력해주세요",2000).show()
-                else fecthSearchImage(etFragInput.text.toString())
+                if(etFragInput.text.isEmpty()) {
+                    Snackbar.make(root,"검색어를 입력해주세요",2000).show()
+                }
+                else {
+                    searchViewModel.fecthSearchImage(etFragInput.text.toString())
+                    searchViewModel.searchedImage.observe(viewLifecycleOwner){
+                        searchListAdapter.searchList.clear()
+                        searchListAdapter.searchList.addAll(it)
+                        searchListAdapter.notifyDataSetChanged()
+                    }
+                }
             }
 
             val fadeIn = AlphaAnimation(0f,1f).apply { duration = 200 } // 서서히 나오기 , f는 투명도
@@ -116,29 +127,6 @@ class SearchListFragment : Fragment() {
         super.onResume()
         // 저장된 검색어 불러오기
         binding.etFragInput.setText(App.prefs.loadSearchInput())
-    }
-
-    private fun fecthSearchImage(search : String) {
-        CoroutineScope(Dispatchers.Main).launch {
-            runCatching {
-                val image = getSearchImage(search)
-                if(searchListAdapter.searchList.isNullOrEmpty()){
-                    searchListAdapter.searchList.addAll(image)
-                } else {
-                    searchListAdapter.searchList.clear()
-                    searchListAdapter.searchList.addAll(image)
-                }
-                // 동적데이터로 livedata나 listadapter를 사용한것이 아니라서 notify해줘야 recyclerview에 반영
-                searchListAdapter.notifyDataSetChanged()
-            }.onFailure {
-                Log.e("KakaoApi", "fecthSearchImage() failed! : ${it.message}")
-            }
-
-        }
-    }
-
-    private suspend fun getSearchImage(search : String) = withContext(Dispatchers.IO) {
-        SearchRetrofit.api.getSearchImage(query = search).documents
     }
 
     override fun onDestroyView() {
