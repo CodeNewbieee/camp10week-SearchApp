@@ -50,7 +50,10 @@ class SearchListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding){
-            btnFragSearch.setOnClickListener { // 키보드 내리기
+            btnFragSearch.setOnClickListener {
+                // 검색어 저장
+                App.prefs.saveSearchInput(etFragInput.text.toString())
+                // 키보드 내리기
                 val keyboardHidden = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
@@ -61,7 +64,7 @@ class SearchListFragment : Fragment() {
                             (activity as? MainActivity)?.addFavoriteList(searchList[position])
                             searchList[position].isLiked = true
                             notifyDataSetChanged()
-                            // 검색된 리스트 저장
+                            // 검색된 리스트 아이템 클릭시 shared에 저장
                             App.prefs.saveMyLockerList((activity as? MainActivity)?.favoriteList ?: mutableListOf())
                         }
                     }
@@ -81,8 +84,6 @@ class SearchListFragment : Fragment() {
                 if(etFragInput.text.isEmpty()) Snackbar.make(root,"검색어를 입력해주세요",2000).show()
                 else fecthSearchImage(etFragInput.text.toString())
             }
-            // 저장된 검색어 불러오기
-            etFragInput.setText(App.prefs.loadSearchInput())
 
             val fadeIn = AlphaAnimation(0f,1f).apply { duration = 200 } // 서서히 나오기 , f는 투명도
             val fadeOut = AlphaAnimation(1f,0f).apply { duration = 200 } // 서서히 사라지기, f는 투명도
@@ -109,6 +110,12 @@ class SearchListFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 저장된 검색어 불러오기
+        binding.etFragInput.setText(App.prefs.loadSearchInput())
+    }
+
     private fun fecthSearchImage(search : String) {
         CoroutineScope(Dispatchers.Main).launch {
             runCatching {
@@ -130,12 +137,6 @@ class SearchListFragment : Fragment() {
 
     private suspend fun getSearchImage(search : String) = withContext(Dispatchers.IO) {
         SearchRetrofit.api.getSearchImage(query = search).documents
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // 검색어 저장
-        App.prefs.saveSearchInput(binding.etFragInput.text.toString())
     }
 
     override fun onDestroyView() {

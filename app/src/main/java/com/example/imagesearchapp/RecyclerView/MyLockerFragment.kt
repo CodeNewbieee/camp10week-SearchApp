@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.imagesearchapp.MainActivity
 import com.example.imagesearchapp.Retrofit.Document
+import com.example.imagesearchapp.SharedPreferences.App
 import com.example.imagesearchapp.databinding.FragmentMyLockerBinding
 
 
@@ -76,9 +77,18 @@ class MyLockerFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        // shared에 저장된 보관함 리스트 불러오기
+        myLockerListAdapter.myLockerList = App.prefs.loadMyLockerList()
+        myLockerListAdapter.notifyDataSetChanged()
+        Log.d("test", "onStart 저장한 보관함 데이터 불러오기 : ${myLockerListAdapter.myLockerList} ")
+    }
+
     override fun onResume() {
         super.onResume()
         myLockerListAdapter.myLockerList = (activity as? MainActivity)?.favoriteList ?: mutableListOf()
+        Log.d("test", "onResume 클릭한 보관함 목록 : ${myLockerListAdapter.myLockerList} ")
         myLockerListAdapter.notifyDataSetChanged()
     }
 
