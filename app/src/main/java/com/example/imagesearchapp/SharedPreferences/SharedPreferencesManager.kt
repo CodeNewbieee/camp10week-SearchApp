@@ -2,6 +2,7 @@ package com.example.imagesearchapp.SharedPreferences
 
 import android.content.Context
 import android.util.Log
+import com.example.imagesearchapp.Constans
 import com.example.imagesearchapp.RecyclerView.MyLockerListAdapter
 import com.example.imagesearchapp.Retrofit.Document
 import com.google.gson.Gson
@@ -9,31 +10,25 @@ import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
 
 class SharedPreferencesManager(context: Context) {
-    private val PREFS_FILENAME = "prefs"
-    private val DEFAULT_STRING = ""
-    private val DEFAULT_INT = 0
-    private val DEFAULT_BOOLEAN = false
-    private val KEY_INPUT = "inputdata"
-    private val KEY_LOCKER = "lockerlist"
-    private val prefs = context.getSharedPreferences(PREFS_FILENAME,Context.MODE_PRIVATE)
+    private val prefs = context.getSharedPreferences(Constans.PREFS_FILENAME,Context.MODE_PRIVATE)
     private val gson = Gson()
     fun saveSearchInput(data : String) {
-        prefs.edit().putString(KEY_INPUT,data).apply()
+        prefs.edit().putString(Constans.KEY_INPUT,data).apply()
     }
 
     fun loadSearchInput(): String? {
-        return prefs.getString(KEY_INPUT,DEFAULT_STRING)
+        return prefs.getString(Constans.KEY_INPUT,Constans.DEFAULT_STRING)
     }
 
     fun saveMyLockerList(list : MutableList<Document>) {
         val json = gson.toJson(list)
-        prefs.edit().putString(KEY_LOCKER,json).apply()
+        prefs.edit().putString(Constans.KEY_LOCKER,json).apply()
     }
 
     fun loadMyLockerList() : MutableList<Document>{
         var result : MutableList<Document> = mutableListOf()
-        if (prefs.contains(KEY_LOCKER)) {
-            val json = prefs.getString(KEY_LOCKER, DEFAULT_STRING)
+        if (prefs.contains(Constans.KEY_LOCKER)) {
+            val json = prefs.getString(Constans.KEY_LOCKER, Constans.DEFAULT_STRING)
             try {
                 val typeToken = object : TypeToken<MutableList<Document>>() {}.type
                 result  = gson.fromJson(json, typeToken)
