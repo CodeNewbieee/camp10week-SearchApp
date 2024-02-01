@@ -52,7 +52,9 @@ class SearchListFragment : Fragment() {
         with(binding){
             btnFragSearch.setOnClickListener {
                 // 검색어 저장
-                App.prefs.saveSearchInput(etFragInput.text.toString())
+                if(etFragInput.text.isNotEmpty()) {
+                    App.prefs.saveSearchInput(etFragInput.text.toString())
+                }
                 // 키보드 내리기
                 val keyboardHidden = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)

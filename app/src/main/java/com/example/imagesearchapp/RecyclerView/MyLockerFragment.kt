@@ -45,6 +45,8 @@ class MyLockerFragment : Fragment() {
                     override fun onClick(view: View, position: Int) {
                         // 보관함 아이템 클릭시 내역 삭제
                         (activity as? MainActivity)?.removeFavoriteList(myLockerList[position])
+                        // 보관함 변수 리스트에 삭제된 현황을 shared에 저장 (삭제처리)
+                        App.prefs.saveMyLockerList((activity as? MainActivity)?.favoriteList ?: mutableListOf())
                         myLockerListAdapter.notifyDataSetChanged()
                     }
                 }
