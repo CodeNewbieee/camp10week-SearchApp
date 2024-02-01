@@ -1,4 +1,4 @@
-package com.example.imagesearchapp
+package com.example.imagesearchapp.ViewModel
 
 import android.os.Build
 import android.util.Log
@@ -36,7 +36,7 @@ class ImageViewModel(val repository : SearchImageRepository = SearchImageReposit
         when (e) {
             is retrofit2.HttpException -> {
                 val errorJsonString = e.response()?.errorBody()?.string()
-                Log.e(TAG, "Http error : $errorJsonString" )
+                Log.e(TAG, "Http error : $errorJsonString")
             }
             is IOException -> Log.e(TAG, "NetWork error: $e")
             else -> Log.e(TAG, "Unexpected error: $e")

@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import com.example.imagesearchapp.RecyclerView.OnFavoriteChangeListener
 import com.example.imagesearchapp.Retrofit.Document
+import com.example.imagesearchapp.ViewModel.ImageViewModel
 import com.example.imagesearchapp.ViewPager.DepthPageTransformer
 import com.example.imagesearchapp.ViewPager.ViewPagerAdapter
 import com.example.imagesearchapp.databinding.ActivityMainBinding

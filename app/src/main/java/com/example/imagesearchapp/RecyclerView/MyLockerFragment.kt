@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.imagesearchapp.ImageViewModel
+import com.example.imagesearchapp.ViewModel.ImageViewModel
 import com.example.imagesearchapp.MainActivity
 import com.example.imagesearchapp.Retrofit.Document
 import com.example.imagesearchapp.SharedPreferences.App
