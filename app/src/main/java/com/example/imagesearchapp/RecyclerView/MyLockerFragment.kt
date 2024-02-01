@@ -55,6 +55,7 @@ class MyLockerFragment : Fragment() {
             val fadeOut = AlphaAnimation(1f,0f).apply { duration = 200 } // 서서히 사라지기, f는 투명도
             var isTop = true
 
+            // 를로팅 버튼 구현 (최상단 이동)
             rvFragMylocker.addOnScrollListener(object : RecyclerView.OnScrollListener(){
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
