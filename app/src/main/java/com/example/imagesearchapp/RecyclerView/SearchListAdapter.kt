@@ -48,4 +48,16 @@ class SearchListAdapter() : RecyclerView.Adapter<SearchListAdapter.ImageViewHold
             }
         }
     }
+
+    fun updateList (list : List<Document>) {
+        searchList.clear()
+        searchList.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun nextupdateList (List : List<Document>) {
+        searchList.addAll(List)
+        notifyDataSetChanged()
+
+    }
 }

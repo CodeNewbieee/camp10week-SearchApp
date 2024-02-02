@@ -60,6 +60,8 @@ class SearchListFragment : Fragment() {
                 keyboardHidden.hideSoftInputFromWindow(etFragInput.windowToken,0)
 
                 // recyclerview 구성, 아이템클릭 콜백함수
+                rvFragSearchlist.layoutManager = GridLayoutManager(context,2)
+                rvFragSearchlist.setHasFixedSize(true)
                 rvFragSearchlist.adapter = searchListAdapter.apply {
                     itemClick = object : SearchListAdapter.ItemClick {
                         override fun onClick(view: View, position: Int) {
@@ -73,8 +75,6 @@ class SearchListFragment : Fragment() {
                         }
                     }
                 }
-                rvFragSearchlist.layoutManager = GridLayoutManager(context,2)
-                rvFragSearchlist.setHasFixedSize(true)
 
                 // 같은 아이템 favorite 삭제
                 (activity as? MainActivity)?.favoriteListener = object  : OnFavoriteChangeListener {
@@ -90,10 +90,8 @@ class SearchListFragment : Fragment() {
                 }
                 else {
                     searchViewModel.fecthSearchImage(etFragInput.text.toString())
-                    searchViewModel.searchedImage.observe(viewLifecycleOwner){
-                        searchListAdapter.searchList.clear()
-                        searchListAdapter.searchList.addAll(it)
-                        searchListAdapter.notifyDataSetChanged()
+                    searchViewModel.searchedImage.observe(viewLifecycleOwner){list->
+                        searchListAdapter.updateList(list)
                     }
                 }
             }
@@ -120,6 +118,22 @@ class SearchListFragment : Fragment() {
             btnSearchFloating.setOnClickListener {
                 rvFragSearchlist.smoothScrollToPosition(0)
             }
+
+            //무한 스크롤을 위한 리사이클러뷰 위치 감지
+            rvFragSearchlist.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val lastVisibleItemPosition = (rvFragSearchlist.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
+                    val itemTotalCount = rvFragSearchlist.adapter?.itemCount?.minus(1)
+                    // 뷰가 가장 하단일때 (더이상 뿌릴 아이템이 없을떄)
+                    if(rvFragSearchlist.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
+                        searchViewModel.searchedImage.observe(viewLifecycleOwner) {
+                            searchViewModel.nextFecthSearchImage()
+                            searchListAdapter.nextupdateList(it)
+                        }
+                    }
+                }
+            })
         }
     }
 

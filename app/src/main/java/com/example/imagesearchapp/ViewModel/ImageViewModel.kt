@@ -7,12 +7,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.imagesearchapp.RecyclerView.OnFavoriteChangeListener
 import com.example.imagesearchapp.Retrofit.Document
+import com.example.imagesearchapp.SharedPreferences.App
 import kotlinx.coroutines.launch
 import okio.IOException
 
 private val TAG = "ImageViewModel"
 class ImageViewModel(val repository : SearchImageRepository = SearchImageRepository()): ViewModel() {
+    var favoriteListener : OnFavoriteChangeListener? = null
+
     private val _searchedImage = MutableLiveData<List<Document>>()
     val searchedImage : LiveData<List<Document>> get() = _searchedImage
 
@@ -33,6 +37,14 @@ class ImageViewModel(val repository : SearchImageRepository = SearchImageReposit
         }
     }
 
+    // 스크롤 하단 감지 후 추가 검색
+    fun nextFecthSearchImage() {
+        viewModelScope.launch {
+            val image = repository.getSearchImage(App.prefs.loadSearchInput().toString())
+            _searchedImage.value = image
+        }
+    }
+
     // 에러코드 확인용 , Http 통신 에러 (401, 404 등)
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     private fun handleException(e : Throwable) {
@@ -48,13 +60,13 @@ class ImageViewModel(val repository : SearchImageRepository = SearchImageReposit
 
     fun addFavoriteList(item : Document) {
         if (!_favoriteList.value?.contains(item)!!) {
-            _favoriteList.value!!.add(item)
+            _favoriteList.value?.add(item)
         }
     }
 
     fun removeFavoriteList(item : Document) {
-        _favoriteList.value!!.remove(item)
-//        favoriteListener?.onFavoriteRemoved(item)
+        _favoriteList.value?.remove(item)
+        favoriteListener?.onFavoriteRemoved(item)
     }
 
 }
