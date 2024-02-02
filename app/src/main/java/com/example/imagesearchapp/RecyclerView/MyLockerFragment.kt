@@ -87,15 +87,14 @@ class MyLockerFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         // shared에 저장된 보관함 리스트 불러오기
-        myLockerListAdapter.myLockerList = App.prefs.loadMyLockerList()
+        (activity as? MainActivity)?.favoriteList = App.prefs.loadMyLockerList()
+        myLockerListAdapter.myLockerList = (activity as? MainActivity)?.favoriteList ?: mutableListOf()
         myLockerListAdapter.notifyDataSetChanged()
         Log.d("test", "onStart 저장한 보관함 데이터 불러오기 : ${myLockerListAdapter.myLockerList} ")
     }
 
     override fun onResume() {
         super.onResume()
-        myLockerListAdapter.myLockerList = (activity as? MainActivity)?.favoriteList ?: mutableListOf()
-        Log.d("test", "onResume 클릭한 보관함 목록 : ${myLockerListAdapter.myLockerList} ")
         myLockerListAdapter.notifyDataSetChanged()
     }
 
