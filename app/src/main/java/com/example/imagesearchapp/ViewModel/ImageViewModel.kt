@@ -16,6 +16,9 @@ class ImageViewModel(val repository : SearchImageRepository = SearchImageReposit
     private val _searchedImage = MutableLiveData<List<Document>>()
     val searchedImage : LiveData<List<Document>> get() = _searchedImage
 
+    private var _favoriteList = MutableLiveData<MutableList<Document>>()
+    val favoriteList : LiveData<MutableList<Document>> get() = _favoriteList
+
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     fun fecthSearchImage(search : String) {
         viewModelScope.launch {
@@ -41,6 +44,17 @@ class ImageViewModel(val repository : SearchImageRepository = SearchImageReposit
             is IOException -> Log.e(TAG, "NetWork error: $e")
             else -> Log.e(TAG, "Unexpected error: $e")
         }
+    }
+
+    fun addFavoriteList(item : Document) {
+        if (!_favoriteList.value?.contains(item)!!) {
+            _favoriteList.value!!.add(item)
+        }
+    }
+
+    fun removeFavoriteList(item : Document) {
+        _favoriteList.value!!.remove(item)
+//        favoriteListener?.onFavoriteRemoved(item)
     }
 
 }
