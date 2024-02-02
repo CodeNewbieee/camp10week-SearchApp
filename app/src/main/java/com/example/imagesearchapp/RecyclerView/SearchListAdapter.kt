@@ -7,10 +7,16 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.imagesearchapp.Retrofit.Document
+import com.example.imagesearchapp.databinding.ProgressbarBinding
 import com.example.imagesearchapp.databinding.SearchResultListBinding
 import java.text.SimpleDateFormat
 
-class SearchListAdapter() : RecyclerView.Adapter<SearchListAdapter.ImageViewHolder>() {
+class SearchListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    companion object {
+        private const val TYPE_SEARCHLIST = 0
+        private const val TYPE_LOADING = 1
+    }
+
     var searchList = mutableListOf<Document>()
 
     interface ItemClick {
@@ -18,19 +24,33 @@ class SearchListAdapter() : RecyclerView.Adapter<SearchListAdapter.ImageViewHold
     }
     var itemClick: ItemClick? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        return ImageViewHolder(SearchResultListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when(viewType){
+            TYPE_SEARCHLIST -> ImageViewHolder(SearchResultListBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+            else -> LoadingHolder(ProgressbarBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        }
     }
 
-    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.bind(searchList[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        (holder as ImageViewHolder).bind(searchList[position])
         holder.itemView.setOnClickListener {
             itemClick?.onClick(it,position)
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return when(searchList.get(position)) {
+            null -> TYPE_LOADING
+            else -> TYPE_SEARCHLIST
+        }
+    }
+
     override fun getItemCount(): Int {
-        return searchList.size
+        return if(searchList == null) 0 else searchList.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     inner class ImageViewHolder(private val binding : SearchResultListBinding) : RecyclerView.ViewHolder(binding.root){
@@ -47,6 +67,9 @@ class SearchListAdapter() : RecyclerView.Adapter<SearchListAdapter.ImageViewHold
                 }
             }
         }
+    }
+    inner class LoadingHolder(private val binding: ProgressbarBinding) : RecyclerView.ViewHolder(binding.root) {
+
     }
 
     fun updateList (list : List<Document>) {

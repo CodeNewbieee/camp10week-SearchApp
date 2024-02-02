@@ -29,6 +29,7 @@ class SearchListFragment : Fragment() {
     private val binding get() = _binding!!
     private val searchListAdapter by lazy { SearchListAdapter() }
     private val searchViewModel by activityViewModels<ImageViewModel>()
+    private var isLoading =false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,10 +127,12 @@ class SearchListFragment : Fragment() {
                     val lastVisibleItemPosition = (rvFragSearchlist.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
                     val itemTotalCount = rvFragSearchlist.adapter?.itemCount?.minus(1)
                     // 뷰가 가장 하단일때 (더이상 뿌릴 아이템이 없을떄)
-                    if(rvFragSearchlist.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
-                        searchViewModel.searchedImage.observe(viewLifecycleOwner) {
-                            searchViewModel.nextFecthSearchImage()
-                            searchListAdapter.nextupdateList(it)
+                    if(!isLoading) {
+                        if(rvFragSearchlist.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
+                            searchViewModel.searchedImage.observe(viewLifecycleOwner) {
+                                searchViewModel.nextFecthSearchImage()
+                                searchListAdapter.nextupdateList(it)
+                            }
                         }
                     }
                 }
